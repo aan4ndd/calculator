@@ -14,12 +14,18 @@ let operator = '';
 const display = document.getElementById("display");
 const keys = document.querySelector(".keys")
 
+function clear(){
+   input1 = ""
+   input2 = ""
+   operator = ""
+}
+
 const add = (a, b) => a + b;
 const subtract = (a, b ) => a - b;
 const multiply = (a, b) => a * b;
 const divide = (a, b) =>{
     if(b == 0){
-        return undefined;
+     return "ERROR";
     }
     else{
        return a / b;
@@ -28,22 +34,30 @@ const divide = (a, b) =>{
 }
 
 function operate(input1, operator, input2){
+   let result;
     switch(operator){
         case "+":
-           return add(input1, input2);
-
+           result = add(input1, input2);
+            break;
         case "-":
-           return subtract(input1, input2);
+         result = subtract(input1, input2);
+            break;
 
         case "x":
-           return multiply(input1, input2);
+           result = multiply(input1, input2);
+           break;
 
         case "/":
-           return divide(input1, input2);
-
-        default:
-            undefined;
+         result = divide(input1, input2);
+   break;
     }
+    if(result == "ERROR"){
+      display.textContent = "You cannot divide by 0";
+      clear();
+      return null;
+
+    }
+    return result
 }
 
 keys.addEventListener('click', e =>{
@@ -68,7 +82,10 @@ keys.addEventListener('click', e =>{
  }
 if(e.target.matches(".operator")){
    if(input1 !== "" && input2 !== "" && operator !== ""){
-      let result = operate(Number(input1), operator,Number(input2));
+      result = operate(Number(input1), operator,Number(input2));
+
+      if(result === null) return;
+
       input1 = result;
       input2 = "";
       operator = e.target.textContent;   
@@ -84,7 +101,9 @@ if(e.target.matches(".equal")){
    if(input1 && input2 && operator){
 
    
-     let result = operate(Number(input1), operator, Number(input2));
+     result = operate(Number(input1), operator, Number(input2));
+     if(result === null)  return;
+      
      display.textContent = result;
      input1 = result;
      input2 = "";
@@ -94,12 +113,9 @@ if(e.target.matches(".equal")){
 }
 
 if(e.target.matches(".clear")){
-   input1 = "";
-   input2 = "";
-   operator = "";
 
+   clear()
    display.textContent = "";
-   
 }
 
 })
